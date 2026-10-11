@@ -9,6 +9,22 @@ const escapeHtml = (text: string): string =>
 		.replace(/>/g, '&gt;')
 		.replace(/"/g, '&quot;');
 
+// Dialog texts. The language comes from Joplin's own `locale` setting.
+// English is the fallback; add a language by adding an entry here.
+const dialogStrings = {
+	en: { title: 'Title', content: 'Content', defaultTitle: 'Spoiler', defaultBody: 'Content' },
+	ru: { title: 'Заголовок', content: 'Содержимое', defaultTitle: 'Спойлер', defaultBody: 'Содержимое' },
+};
+
+const getDialogStrings = async () => {
+	try {
+		const locale = String((await joplin.settings.globalValue('locale')) || 'en').toLowerCase();
+		return locale.startsWith('ru') ? dialogStrings.ru : dialogStrings.en;
+	} catch (error) {
+		return dialogStrings.en;
+	}
+};
+
 joplin.plugins.register({
 	onStart: async function() {
 
@@ -19,18 +35,20 @@ joplin.plugins.register({
 		await joplin.commands.register({
 			name: 'insert_spoiler_block',
 			label: 'Spoiler block',
-			iconName: 'fas fa-angle-right',
+			iconName: 'fas fa-eye-slash',
 			execute: async () => {
 
 				// If the user selected text, prefill the body with it
 				const selectedText = (await joplin.commands.execute('selectedText') as string) || '';
 
+				const t = await getDialogStrings();
+
 				await joplin.views.dialogs.setHtml(dialogHandle, `
 					<div class="wrap">
 						<form name="spoiler">
-							<label class="field-label" for="title">Заголовок</label>
-							<input type="text" id="title" name="title" value="Спойлер" autofocus />
-							<label class="field-label" for="body">Содержимое</label>
+							<label class="field-label" for="title">${t.title}</label>
+							<input type="text" id="title" name="title" value="${escapeHtml(t.defaultTitle)}" autofocus />
+							<label class="field-label" for="body">${t.content}</label>
 							<textarea id="body" name="body">${escapeHtml(selectedText)}</textarea>
 						</form>
 					</div>
@@ -60,8 +78,8 @@ joplin.plugins.register({
 				`);
 
 				await joplin.views.dialogs.setButtons(dialogHandle, [
-					{ id: 'ok', title: 'Вставить' },
-					{ id: 'cancel', title: 'Отмена' },
+					{ id: 'ok' },
+					{ id: 'cancel' },
 				]);
 
 				const result = await joplin.views.dialogs.open(dialogHandle);
@@ -70,8 +88,8 @@ joplin.plugins.register({
 				const form = result.formData?.spoiler || {};
 
 				// Title must be one line, body must not be empty (the parser needs it)
-				const title = (form.title || 'Спойлер').replace(/\s*\n\s*/g, ' ').trim() || 'Спойлер';
-				const body = (form.body || '').trim() || 'Содержимое';
+				const title = (form.title || t.defaultTitle).replace(/\s*\n\s*/g, ' ').trim() || t.defaultTitle;
+				const body = (form.body || '').trim() || t.defaultBody;
 
 				const spoilerText = `:[\n${title}\n\n${body}\n\n]:`;
 				if (selectedText) {
