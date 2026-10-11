@@ -10,7 +10,7 @@ The block adapts to light and dark themes.
 
 **Note**: Requires Joplin 2.9+. Tested with Joplin 3.7.
 
-![Spoiler blocks, collapsed and expanded](./docs/spoilers-blocks-preview.png)
+![Spoiler blocks, collapsed and expanded](https://github.com/agteamdev/joplin-plugin-spoiler-blocks/blob/main/docs/spoilers-blocks-preview.png)
 
 ## Installation
 

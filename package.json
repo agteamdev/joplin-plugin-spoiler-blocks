@@ -1,18 +1,29 @@
 {
   "name": "joplin-plugin-spoiler-blocks",
-  "version": "2.0.0",
-  "scripts": {
-    "dist": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtraScripts && webpack --env joplin-plugin-config=createArchive",
-    "prepare": "npm run dist",
-    "updateVersion": "webpack --env joplin-plugin-config=updateVersion"
-  },
+  "version": "2.0.1",
+  "description": "Plugin to hide/show content using spoiler blocks in Joplin notes",
+  "author": "agteamdev",
   "license": "MIT",
+  "homepage": "https://github.com/agteamdev/joplin-plugin-spoiler-blocks#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agteamdev/joplin-plugin-spoiler-blocks.git"
+  },
+  "bugs": "https://github.com/agteamdev/joplin-plugin-spoiler-blocks/issues",
   "keywords": [
     "joplin-plugin"
   ],
   "files": [
     "publish"
   ],
+  "engines": {
+    "joplin": ">=2.9"
+  },
+  "scripts": {
+    "dist": "webpack --env joplin-plugin-config=buildMain && webpack --env joplin-plugin-config=buildExtraScripts && webpack --env joplin-plugin-config=createArchive",
+    "prepare": "npm run dist",
+    "updateVersion": "webpack --env joplin-plugin-config=updateVersion"
+  },
   "devDependencies": {
     "@joplin/lib": "~2.9",
     "@types/node": "^18.7.13",
