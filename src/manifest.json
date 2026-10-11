@@ -2,11 +2,11 @@
 	"manifest_version": 1,
 	"id": "joplin.plugin.spoiler.blocks",
 	"app_min_version": "2.9",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"name": "Spoilers blocks",
 	"description": "Spoiler blocks with a title and an expandable body. Fork of Spoilers by Martin Korelič, inline spoilers removed.",
-	"author": "Martin Korelič",
-	"homepage_url": "https://github.com/agteamdev/joplin-plugin-spoiler",
-	"repository_url": "https://github.com/agteamdev/joplin-plugin-spoiler",
-	"keywords": ["joplin", "plugin", "spoiler", "blocks"]
+	"author": "agteamdev (based on work by Martin Korelič)",
+	"homepage_url": "https://github.com/agteamdev/joplin-plugin-spoiler-blocks",
+	"repository_url": "https://github.com/agteamdev/joplin-plugin-spoiler-blocks",
+	"keywords": ["joplin-plugin", "joplin", "plugin", "spoiler", "blocks"]
 }
