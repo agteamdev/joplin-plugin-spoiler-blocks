@@ -1,55 +1,42 @@
-# Joplin Plugin - Spoilers
+# Joplin Plugin - Spoilers blocks
 
-This Joplin plugin allows you to create inline spoilers and spoiler blocks with title and extendable body.
+> **This is a fork.** The original plugin, *Spoilers* by Martin Korelič
+> ([martinkorelic/joplin-plugin-spoilers](https://github.com/martinkorelic/joplin-plugin-spoilers)),
+> is MIT licensed. This fork removes inline spoilers, keeps only the spoiler block,
+> and changes its look and the way it is inserted.
 
-**Note**: Requires Joplin 1.7.11+
+This Joplin plugin adds spoiler blocks: a title that expands to show an extendable body.
+The block adapts to light and dark themes.
 
-**Version**: 1.0.6
+**Note**: Requires Joplin 2.9+. Tested with Joplin 3.7.
 
-**Spoilers (inline)**
-
-![](./docs/inline-spoiler-preview.gif)
-
-**Spoiler blocks**
-
-![](./docs/spoiler-block-preview.gif)
-
-
+![Spoiler blocks, collapsed and expanded](./docs/spoilers-blocks-preview.png)
 
 ## Installation
 
-- Open Joplin and navigate to `Preferences > Plugins`
-- Search for `Spoilers` and click install
+- Download `joplin.plugin.spoiler.blocks.jpl` from the releases page
+- In Joplin open `Tools > Options > Plugins > Install from file` and select the file
 - Restart Joplin
 
 ### Uninstall
 
 - Open Joplin and navigate to `Tools > Options > Plugins`
-- Search for `Spoilers` plugin
-- Press `Delete` to remove the plugin or `Disable` to disable it
+- Find `Spoilers blocks`, press `Delete` to remove it or `Disable` to turn it off
 - Restart Joplin
 
 ## Usage
 
-### Spoiler (inline)
-
-In order to create a spoiler (inline), you can:
-- press on the `Spoiler` button or
-- use the shortcut `Ctrl + Alt + O`
-- select text and use any of the previous options
-- or manually write in the following format:
-
-```
-%%spoiler%%
-```
-
 ### Spoiler block
 
-In order to create a spoiler block, you can:
-- press on the `Spoiler block` button or
+To create a spoiler block, you can:
+- press the `Spoiler block` button in the editor toolbar, or
 - use the shortcut `Ctrl + Alt + P`
-- select text and use any of the previous options
-- or manually write in the following format:
+
+A dialog opens with two fields: **Title** and **Content**. If you selected text
+before opening it, the selection is placed into the Content field and replaced when you insert.
+After insertion you can edit the block directly in the note.
+
+You can also write the block by hand in this format:
 
 ```
 :[
@@ -60,11 +47,11 @@ Spoiler body text here...
 ]:
 ```
 
-Please note, that the empty line above and below spoiler body text is **needed**.
-Spoiler title and body supports markdown formatting as well.
+The empty line above and below the body is **required**.
+The title and body support Markdown formatting.
 
 **Example**:
-```
+````
 :[
 3 ways to check if an Object has a property in JS
 
@@ -79,63 +66,69 @@ const hero = {
   name: 'Batman'
 };
 
-hero.toString; // => function() {...}
-
 hero.hasOwnProperty('toString'); // => false
 ~~~
-* * *
 
 ]:
-```
+````
+
+### Editing and the Rich Text editor
+
+- **Markdown view and preview**: click the title to expand or collapse the block.
+- **Rich Text editor**: blocks are always shown expanded.
+- To change a block, edit its text in the Markdown editor (the lines between `:[` and `]:`).
 
 ## Custom styles
 
-If you would like to style the spoiler blocks to your preference, use the following in your `userstyle.css` file:
-
+To change the look of the blocks, add the following to your `userstyle.css`:
 
 ```css
-/* Styling of the spoiler block title */
-.summary-title {
-  
-}
+/* The whole block */
+.spoiler-block {}
 
-/* Styling of the spoiler block body */
-.summary-content {
-  
-}
+/* The clickable title row */
+.summary-title {}
+
+/* The expandable body */
+.summary-content {}
 ```
 
-### Exporting styles
+### Exporting and printing
 
-By default when exporting with spoiler blocks, the blocks get extended, show the body and hides the arrows. Inline spoilers stay hidden.
+When printing or exporting, blocks are shown expanded and the arrow is hidden.
+To change this, use the following in your `userstyle.css`:
 
-Alternately, if you would like to style the spoiler blocks to your liking when exporting, use the following in you `userstyle.css` file:
 ```css
 @media print {
 
-  /* Hides the side arrow */
-  .summary-title:before {
-      content: "";
+  /* Hides the arrow in the title */
+  .summary-title::before {
+    content: "";
   }
 
-  /* Container for spoiler blocks */
-  .spoiler-block {}
-
-  /* Container for spoiler title */
-  #spoiler-block-title {}
-  
-  /* Container for spoiler body */
-  #spoiler-block-body {
-      /* Shows the body contents */
-      display: block;
-      animation: none;
+  /* Shows the body contents */
+  .summary-content {
+    display: block;
+    animation: none;
   }
 
 }
 ```
 
+## Changes from the original plugin
+
+- Inline spoilers (`%%spoiler%%`) are removed.
+- The block is restyled: smaller, with colours that follow the Joplin theme.
+- A dialog for the title and content opens on insertion.
+- The plugin is renamed to `Spoilers blocks` with the id `joplin.plugin.spoiler.blocks`.
+
+Existing blocks in the `:[ ]:` format keep working.
+
+## Credits
+
+- Original plugin: Martin Korelič, MIT license.
+- Fork and changes: agteamdev.
+
 ## Notes
 
-- **There might be bugs**, [report them here](https://github.com/martinkorelic/joplin-plugin-spoilers/issues) and I'll try to fix them when I'll find time.
-
-> Created on 12th April 2021
+- **There might be bugs**. Report them in the [issues of this repository](https://github.com/agteamdev/joplin-plugin-spoiler/issues).
