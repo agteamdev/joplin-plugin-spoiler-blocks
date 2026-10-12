@@ -14,6 +14,12 @@ The block adapts to light and dark themes.
 
 ## Installation
 
+### Via Joplin Plugin Directory
+1. `Open Joplin → Tools → Options → Plugins`
+2. Search for `"spoiler"` or `"spoiler blocks"`
+3. Click Install
+
+### Manual Installation
 - Download `joplin.plugin.spoiler.blocks.jpl` from the releases page
 - In Joplin open `Tools > Options > Plugins > Install from file` and select the file
 - Restart Joplin
