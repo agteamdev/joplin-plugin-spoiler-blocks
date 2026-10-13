@@ -28,8 +28,14 @@ const getDialogStrings = async () => {
 joplin.plugins.register({
 	onStart: async function() {
 
-		// Dialog for entering title and body of a new spoiler block
-		const dialogHandle = await joplin.views.dialogs.create('spoiler_block_dialog');
+		// Dialog for entering title and body of a new spoiler block.
+		// Mobile Joplin has no dialog API (only showMessageBox), so this may be null there.
+		let dialogHandle: any = null;
+		try {
+			dialogHandle = await joplin.views.dialogs.create('spoiler_block_dialog');
+		} catch (error) {
+			dialogHandle = null;
+		}
 
 		// Spoiler block command
 		await joplin.commands.register({
@@ -42,6 +48,17 @@ joplin.plugins.register({
 				const selectedText = (await joplin.commands.execute('selectedText') as string) || '';
 
 				const t = await getDialogStrings();
+
+				// No dialog (mobile): insert a block from the selection or the default texts
+				if (!dialogHandle) {
+					const plainTitle = t.defaultTitle;
+					const plainBody = selectedText.trim() || t.defaultBody;
+					if (selectedText) {
+						await joplin.commands.execute('replaceSelection', '');
+					}
+					await joplin.commands.execute('insertText', `:[\n${plainTitle}\n\n${plainBody}\n\n]:`);
+					return;
+				}
 
 				await joplin.views.dialogs.setHtml(dialogHandle, `
 					<div class="wrap">
@@ -102,14 +119,22 @@ joplin.plugins.register({
 
 
 		// Toolbar button and keyboard shortcut for the spoiler block
-		await joplin.views.toolbarButtons.create('insert_spoiler_block', 'insert_spoiler_block', ToolbarButtonLocation.EditorToolbar);
+		try {
+			await joplin.views.toolbarButtons.create('insert_spoiler_block', 'insert_spoiler_block', ToolbarButtonLocation.EditorToolbar);
+		} catch (error) {
+			// Not available on this platform
+		}
 
+		try {
 		await joplin.views.menus.create('spoiler_block', 'Insert spoiler block', [
 			{
 				commandName: 'insert_spoiler_block',
 				accelerator: 'Ctrl+Alt+P'
 			}
 		]);
+		} catch (error) {
+			// Menus are not available on this platform
+		}
 
 		// Register the Markdown-it plugin (renders the spoiler blocks)
 		await joplin.contentScripts.register(
